@@ -10,7 +10,8 @@
     "test:watch": "jest --config jest.config.ts --watch",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed": "npx ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

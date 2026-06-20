@@ -4,6 +4,7 @@
  * Express 应用组装：中间件 → 路由 → 错误处理。
  * 导出 createApp() 便于测试注入；直接运行时启动监听。
  */
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createPrismaClient } from './lib/prisma';
