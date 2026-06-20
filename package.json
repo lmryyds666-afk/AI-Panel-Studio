@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --config jest.config.ts --runInBand",
+    "test:parallel": "jest --config jest.config.ts",
+    "test:watch": "jest --config jest.config.ts --watch",
+    "dev:backend": "cd backend && npm run dev"
   },
   "repository": {
     "type": "git",

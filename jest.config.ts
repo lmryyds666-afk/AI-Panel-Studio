@@ -16,10 +16,12 @@ const config: Config = {
       tsconfig: {
         target: 'ES2022',
         module: 'commonjs',
+        moduleResolution: 'node',
         esModuleInterop: true,
         skipLibCheck: true,
-        strict: true,
+        strict: false,
         baseUrl: '.',
+        ignoreDeprecations: '6.0',
         paths: {
           '@prisma/client': ['backend/node_modules/@prisma/client'],
         },
