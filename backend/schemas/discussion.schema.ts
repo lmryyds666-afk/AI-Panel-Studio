@@ -26,7 +26,7 @@ export const createDiscussionSchema = z.object({
 export const listDiscussionsSchema = z.object({
   status: z
     .enum(['SETUP', 'IN_PROGRESS', 'COMPLETED'], {
-      errorMap: () => ({ message: '状态值只能是 SETUP、IN_PROGRESS 或 COMPLETED' }),
+      message: '状态值只能是 SETUP、IN_PROGRESS 或 COMPLETED',
     })
     .optional(),
   page: z.coerce

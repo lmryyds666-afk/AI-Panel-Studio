@@ -101,7 +101,7 @@ export function createDiscussionController(prisma: PrismaClient) {
   // ══════════════════════════════════════════════════
 
   async function getDetail(req: Request, res: Response, _next: NextFunction) {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const discussion = await prisma.discussion.findUnique({
       where: { id },
@@ -122,6 +122,16 @@ export function createDiscussionController(prisma: PrismaClient) {
       throw new AppError('讨论不存在', 404);
     }
 
+    // Prisma v7: include 返回类型需要展开
+    const disc = discussion as typeof discussion & {
+      guests: Array<{
+        id: string; name: string; role: string; occupation: string;
+        title: string; stance: string; color: string; runStatus: string;
+        sortOrder: number;
+      }>;
+      _count: { speeches: number; consensusRecords: number };
+    };
+
     // 分别统计共识与分歧数量
     const consensusCount = await prisma.consensusRecord.count({
       where: { discussionId: id, recordType: 'CONSENSUS' },
@@ -131,12 +141,12 @@ export function createDiscussionController(prisma: PrismaClient) {
     });
 
     success(res, {
-      id: discussion.id,
-      topic: discussion.topic,
-      status: discussion.status,
-      expertCount: discussion.expertCount,
-      summary: discussion.summary,
-      guests: discussion.guests.map((g) => ({
+      id: disc.id,
+      topic: disc.topic,
+      status: disc.status,
+      expertCount: disc.expertCount,
+      summary: disc.summary,
+      guests: disc.guests.map((g) => ({
         id: g.id,
         name: g.name,
         role: g.role,
@@ -147,11 +157,11 @@ export function createDiscussionController(prisma: PrismaClient) {
         runStatus: g.runStatus,
         sortOrder: g.sortOrder,
       })),
-      speechCount: discussion._count.speeches,
+      speechCount: disc._count.speeches,
       consensusCount,
       divergenceCount,
-      createdAt: discussion.createdAt.toISOString(),
-      updatedAt: discussion.updatedAt.toISOString(),
+      createdAt: disc.createdAt.toISOString(),
+      updatedAt: disc.updatedAt.toISOString(),
     });
   }
 
@@ -160,7 +170,7 @@ export function createDiscussionController(prisma: PrismaClient) {
   // ══════════════════════════════════════════════════
 
   async function generateGuests(req: Request, res: Response, _next: NextFunction) {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     // 查找讨论（校验存在性与状态）
     const discussion = await prisma.discussion.findUnique({ where: { id } });
@@ -220,7 +230,7 @@ export function createDiscussionController(prisma: PrismaClient) {
   // ══════════════════════════════════════════════════
 
   async function confirmGuests(req: Request, res: Response, _next: NextFunction) {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const discussion = await prisma.discussion.findUnique({
       where: { id },
@@ -236,7 +246,11 @@ export function createDiscussionController(prisma: PrismaClient) {
         409,
       );
     }
-    if (discussion._count.guests < 2) {
+
+    const discWithCount = discussion as typeof discussion & {
+      _count: { guests: number };
+    };
+    if (discWithCount._count.guests < 2) {
       throw new AppError(
         '嘉宾人数不足，至少需要 2 位嘉宾（含主持人）才能确认',
         409,
@@ -260,7 +274,7 @@ export function createDiscussionController(prisma: PrismaClient) {
   // ══════════════════════════════════════════════════
 
   async function endDiscussion(req: Request, res: Response, _next: NextFunction) {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const discussion = await prisma.discussion.findUnique({ where: { id } });
     if (!discussion) {
