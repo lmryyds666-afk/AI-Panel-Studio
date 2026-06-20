@@ -19,6 +19,7 @@ import {
 } from '../schemas/discussion.schema';
 import { createDiscussionController } from '../controllers/discussions';
 import type { SpeechScheduler } from '../services/speech-scheduler';
+import type { ConsensusExtractor } from '../services/consensusExtractor';
 import type { DiscussionWsServer } from '../ws/websocket-server';
 
 /**
@@ -27,14 +28,16 @@ import type { DiscussionWsServer } from '../ws/websocket-server';
  * @param prisma    - Prisma 客户端（依赖注入，便于测试）
  * @param scheduler - AI 调度器（可选，生产环境传入以自动生成发言）
  * @param wsServer  - WebSocket 服务（可选）
+ * @param extractor - 共识提炼器（可选，生产环境传入以实时提炼共识/分歧）
  */
 export function createDiscussionRouter(
   prisma: PrismaClient,
   scheduler?: SpeechScheduler,
   wsServer?: DiscussionWsServer,
+  extractor?: ConsensusExtractor,
 ): Router {
   const router = Router();
-  const ctrl = createDiscussionController(prisma, scheduler, wsServer);
+  const ctrl = createDiscussionController(prisma, scheduler, wsServer, extractor);
 
   // POST /discussions — 创建讨论
   router.post(

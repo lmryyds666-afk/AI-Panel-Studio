@@ -11,6 +11,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { PrismaClient } from '@prisma/client';
 import { AppError } from '../types/errors';
 import type { SpeechScheduler } from '../services/speech-scheduler';
+import type { ConsensusExtractor } from '../services/consensusExtractor';
 import type { DiscussionWsServer } from '../ws/websocket-server';
 
 /**
@@ -35,6 +36,7 @@ async function runDiscussionLoop(
   scheduler: SpeechScheduler,
   wsServer: DiscussionWsServer,
   prisma: PrismaClient,
+  extractor?: ConsensusExtractor,
 ) {
   try {
     // 1. 启动讨论 → 生成主持人开场
@@ -61,6 +63,34 @@ async function runDiscussionLoop(
         console.log(`[Scheduler] 讨论 ${discussionId} 达到最大发言数，自动结束`);
         break;
       }
+
+      // 实时共识/分歧提炼（异步，不阻塞发言流程）
+      if (extractor && ctx) {
+        const guestContexts = [...ctx.guests.values()].map((g) => ({
+          id: g.id,
+          name: g.name,
+          role: g.role,
+          title: g.title,
+          stance: g.stance,
+        }));
+        extractor.analyzeNewSpeech(
+          discussionId,
+          {
+            id: speech.id,
+            guestId: speech.guestId,
+            guestName: speech.guestName,
+            guestTitle: speech.guestTitle,
+            guestColor: speech.guestColor,
+            content: speech.content,
+            speechType: speech.speechType,
+            sequence: speech.sequence,
+          },
+          guestContexts,
+          ctx.topic,
+        ).catch((err) => {
+          console.warn(`[ConsensusExtractor] 讨论 ${discussionId} 异步提炼异常：${(err as Error).message}`);
+        });
+      }
     }
 
     // 3. 自动结束讨论 → 生成总结
@@ -85,6 +115,7 @@ export function createDiscussionController(
   prisma: PrismaClient,
   scheduler?: SpeechScheduler,
   wsServer?: DiscussionWsServer,
+  extractor?: ConsensusExtractor,
 ) {
   // ══════════════════════════════════════════════════
   // 1. 创建讨论
@@ -343,7 +374,7 @@ export function createDiscussionController(
 
     // 背景启动 AI 讨论调度循环（不阻塞响应）
     if (scheduler && wsServer) {
-      runDiscussionLoop(id, scheduler, wsServer, prisma);
+      runDiscussionLoop(id, scheduler, wsServer, prisma, extractor);
     }
 
     success(res, {

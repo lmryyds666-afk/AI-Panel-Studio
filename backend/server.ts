@@ -14,6 +14,7 @@ import { errorHandler } from './middleware/error-handler';
 import { createDiscussionRouter } from './routes/discussions';
 import { DiscussionWsServer } from './ws/websocket-server';
 import { SpeechScheduler } from './services/speech-scheduler';
+import { ConsensusExtractor } from './services/consensusExtractor';
 import { createDeepSeekCaller } from './services/guest-generation.service';
 
 /**
@@ -27,6 +28,7 @@ export function createApp(
   dbUrl?: string,
   wsServer?: DiscussionWsServer,
   scheduler?: SpeechScheduler,
+  extractor?: ConsensusExtractor,
 ) {
   const prisma = createPrismaClient(dbUrl);
   const app = express();
@@ -37,7 +39,7 @@ export function createApp(
   app.use(requestLogger);
 
   // 路由挂载
-  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer));
+  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer, extractor));
 
   // 健康检查
   app.get('/health', (_req, res) => {
@@ -70,12 +72,13 @@ export function createServer(dbUrl?: string) {
   const httpServer = http.createServer(app);
   const wsServer = new DiscussionWsServer(httpServer);
 
-  // 3. AI 调度器
+  // 3. AI 调度器 + 共识提炼器
   const callAI = createDeepSeekCaller();
   const scheduler = new SpeechScheduler(prisma, callAI, wsServer);
+  const extractor = new ConsensusExtractor(prisma, callAI, wsServer);
 
   // 4. 路由（注入所有依赖）
-  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer));
+  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer, extractor));
 
   // 5. 健康检查 + 错误处理
   app.get('/health', (_req, res) => {
