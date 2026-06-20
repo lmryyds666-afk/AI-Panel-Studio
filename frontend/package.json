@@ -1,0 +1,14 @@
+{
+  "name": "ai-panel-studio-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --browser chrome"
+  },
+  "devDependencies": {
+    "cypress": "^14.0.0",
+    "typescript": "^5.4.0"
+  }
+}

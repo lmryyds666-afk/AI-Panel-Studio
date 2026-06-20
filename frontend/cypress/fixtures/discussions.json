@@ -1,0 +1,217 @@
+{
+  "listResponse": {
+    "code": 0,
+    "data": {
+      "items": [
+        {
+          "id": "disc-existing-001",
+          "topic": "可再生能源能否在2035年前全面替代化石燃料？",
+          "status": "IN_PROGRESS",
+          "expertCount": 4,
+          "guestCount": 5,
+          "createdAt": "2026-06-19T10:00:00.000Z",
+          "updatedAt": "2026-06-19T10:30:00.000Z"
+        },
+        {
+          "id": "disc-existing-002",
+          "topic": "远程办公对组织文化的影响",
+          "status": "COMPLETED",
+          "expertCount": 3,
+          "guestCount": 4,
+          "createdAt": "2026-06-18T08:00:00.000Z",
+          "updatedAt": "2026-06-18T09:15:00.000Z"
+        }
+      ],
+      "total": 2,
+      "page": 1,
+      "pageSize": 20
+    },
+    "message": "ok"
+  },
+
+  "createResponse": {
+    "code": 0,
+    "data": {
+      "id": "disc-new-cypress-001",
+      "topic": "AI是否会在2030年前取代50%白领岗位？",
+      "status": "SETUP",
+      "expertCount": 4,
+      "createdAt": "2026-06-20T13:00:00.000Z",
+      "updatedAt": "2026-06-20T13:00:00.000Z"
+    },
+    "message": "ok"
+  },
+
+  "detailResponse": {
+    "code": 0,
+    "data": {
+      "id": "disc-new-cypress-001",
+      "topic": "AI是否会在2030年前取代50%白领岗位？",
+      "status": "SETUP",
+      "expertCount": 4,
+      "summary": null,
+      "guests": [],
+      "speechCount": 0,
+      "consensusCount": 0,
+      "divergenceCount": 0,
+      "createdAt": "2026-06-20T13:00:00.000Z",
+      "updatedAt": "2026-06-20T13:00:00.000Z"
+    },
+    "message": "ok"
+  },
+
+  "generateGuestsResponse": {
+    "code": 0,
+    "data": {
+      "discussionId": "disc-new-cypress-001",
+      "guests": [
+        {
+          "id": "guest-host-001",
+          "name": "张维远",
+          "role": "HOST",
+          "occupation": "资深科技媒体人",
+          "title": "《前沿对话》栏目主持人",
+          "stance": "中立引导者，擅长在分歧中找到共同点",
+          "color": "#4ECDC4",
+          "sortOrder": 0
+        },
+        {
+          "id": "guest-exp-001",
+          "name": "李敏华",
+          "role": "EXPERT",
+          "occupation": "AI研究员",
+          "title": "某头部科技公司AI Lab高级研究员",
+          "stance": "AI将在2030年前显著替代重复性脑力劳动，但创造性工作仍然安全",
+          "color": "#FF6B6B",
+          "sortOrder": 1
+        },
+        {
+          "id": "guest-exp-002",
+          "name": "王德仁",
+          "role": "EXPERT",
+          "occupation": "宏观经济学家",
+          "title": "某知名智库首席经济学家",
+          "stance": "技术替代是渐进的，2030年节点更多是监管与社会的适应速度问题",
+          "color": "#45B7D1",
+          "sortOrder": 2
+        },
+        {
+          "id": "guest-exp-003",
+          "name": "陈思语",
+          "role": "EXPERT",
+          "occupation": "劳动法学者",
+          "title": "某高校法学院副教授",
+          "stance": "核心障碍不在技术而在制度——劳动法与社会保障体系远未准备好",
+          "color": "#F7DC6F",
+          "sortOrder": 3
+        },
+        {
+          "id": "guest-exp-004",
+          "name": "赵明远",
+          "role": "EXPERT",
+          "occupation": "企业数字化转型顾问",
+          "title": "前四大咨询合伙人",
+          "stance": "企业实际落地速度远慢于技术成熟曲线，组织惯性是最大刹车",
+          "color": "#BB8FCE",
+          "sortOrder": 4
+        }
+      ]
+    },
+    "message": "ok"
+  },
+
+  "confirmGuestsResponse": {
+    "code": 0,
+    "data": {
+      "id": "disc-new-cypress-001",
+      "status": "IN_PROGRESS",
+      "updatedAt": "2026-06-20T13:02:00.000Z"
+    },
+    "message": "ok"
+  },
+
+  "studioDetailResponse": {
+    "code": 0,
+    "data": {
+      "id": "disc-new-cypress-001",
+      "topic": "AI是否会在2030年前取代50%白领岗位？",
+      "status": "IN_PROGRESS",
+      "expertCount": 4,
+      "summary": null,
+      "guests": [
+        {
+          "id": "guest-host-001",
+          "name": "张维远",
+          "role": "HOST",
+          "occupation": "资深科技媒体人",
+          "title": "《前沿对话》栏目主持人",
+          "stance": "中立引导者",
+          "color": "#4ECDC4",
+          "runStatus": "SPEAKING",
+          "sortOrder": 0
+        },
+        {
+          "id": "guest-exp-001",
+          "name": "李敏华",
+          "role": "EXPERT",
+          "occupation": "AI研究员",
+          "title": "高级研究员",
+          "stance": "AI替代论支持者",
+          "color": "#FF6B6B",
+          "runStatus": "IDLE",
+          "sortOrder": 1
+        },
+        {
+          "id": "guest-exp-002",
+          "name": "王德仁",
+          "role": "EXPERT",
+          "occupation": "经济学家",
+          "title": "首席经济学家",
+          "stance": "渐进替代论",
+          "color": "#45B7D1",
+          "runStatus": "IDLE",
+          "sortOrder": 2
+        },
+        {
+          "id": "guest-exp-003",
+          "name": "陈思语",
+          "role": "EXPERT",
+          "occupation": "劳动法学者",
+          "title": "法学副教授",
+          "stance": "制度障碍论",
+          "color": "#F7DC6F",
+          "runStatus": "IDLE",
+          "sortOrder": 3
+        },
+        {
+          "id": "guest-exp-004",
+          "name": "赵明远",
+          "role": "EXPERT",
+          "occupation": "企业顾问",
+          "title": "咨询合伙人",
+          "stance": "组织惯性论",
+          "color": "#BB8FCE",
+          "runStatus": "IDLE",
+          "sortOrder": 4
+        }
+      ],
+      "speechCount": 0,
+      "consensusCount": 0,
+      "divergenceCount": 0,
+      "createdAt": "2026-06-20T13:00:00.000Z",
+      "updatedAt": "2026-06-20T13:02:00.000Z"
+    },
+    "message": "ok"
+  },
+
+  "endDiscussionResponse": {
+    "code": 0,
+    "data": {
+      "id": "disc-new-cypress-001",
+      "status": "COMPLETED",
+      "summary": "本次讨论围绕AI替代白领岗位的时间表展开。共识在于：重复性工作将在5年内大比例自动化，但这不是岗位消失而是任务重构。分歧在于：涉及跨域判断与共情的岗位是否面临实质性威胁。主持人张维远强调，我们过分聚焦于「岗位」替代而忽略了「任务」粒度上的渐进式人机协作。",
+      "updatedAt": "2026-06-20T13:15:00.000Z"
+    },
+    "message": "ok"
+  }
+}

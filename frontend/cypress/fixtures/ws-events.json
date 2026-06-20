@@ -1,0 +1,234 @@
+{
+  "disc1": {
+    "discussionId": "disc-new-cypress-001",
+    "events": [
+      {
+        "event": "discussion_state_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:01.000Z",
+        "payload": {
+          "status": "IN_PROGRESS",
+          "previousStatus": "SETUP"
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:02.000Z",
+        "payload": {
+          "guestId": "guest-host-001",
+          "runStatus": "SPEAKING",
+          "publicThought": "正在以《前沿对话》风格为观众引入话题背景"
+        }
+      },
+      {
+        "event": "new_speech",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:05.000Z",
+        "payload": {
+          "id": "speech-001",
+          "guestId": "guest-host-001",
+          "guestName": "张维远",
+          "guestTitle": "《前沿对话》栏目主持人",
+          "guestColor": "#4ECDC4",
+          "content": "各位观众晚上好，欢迎收看《前沿对话》。今天我们讨论一个备受争议的话题——AI是否会在2030年前取代50%的白领岗位？我们邀请到了四位来自不同领域的专家。",
+          "speechType": "OPENING",
+          "sequence": 1
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:06.000Z",
+        "payload": {
+          "guestId": "guest-host-001",
+          "runStatus": "IDLE",
+          "publicThought": ""
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:08.000Z",
+        "payload": {
+          "guestId": "guest-exp-001",
+          "runStatus": "PREPARING",
+          "publicThought": "正在组织从技术可行性角度的论点"
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:10.000Z",
+        "payload": {
+          "guestId": "guest-exp-001",
+          "runStatus": "SPEAKING",
+          "publicThought": "从大模型能力曲线和自动化历史数据来论证替代时间表"
+        }
+      },
+      {
+        "event": "new_speech",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:12.000Z",
+        "payload": {
+          "id": "speech-002",
+          "guestId": "guest-exp-001",
+          "guestName": "李敏华",
+          "guestTitle": "某头部科技公司AI Lab高级研究员",
+          "guestColor": "#FF6B6B",
+          "content": "根据当前大模型的能力曲线，到2028年左右，文本处理、初级数据分析、客服等岗位的自动化率将超过70%。但需要强调的是，这是任务层面的替代，而非整个岗位的消失。",
+          "speechType": "ANSWER",
+          "sequence": 2
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:13.000Z",
+        "payload": {
+          "guestId": "guest-exp-001",
+          "runStatus": "IDLE",
+          "publicThought": ""
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:15.000Z",
+        "payload": {
+          "guestId": "guest-exp-002",
+          "runStatus": "PREPARING",
+          "publicThought": "准备用经济学数据反驳激进替代论"
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:17.000Z",
+        "payload": {
+          "guestId": "guest-exp-002",
+          "runStatus": "SPEAKING",
+          "publicThought": "从劳动力市场弹性角度反驳单一技术决定论"
+        }
+      },
+      {
+        "event": "new_speech",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:19.000Z",
+        "payload": {
+          "id": "speech-003",
+          "guestId": "guest-exp-002",
+          "guestName": "王德仁",
+          "guestTitle": "某知名智库首席经济学家",
+          "guestColor": "#45B7D1",
+          "content": "我不同意。2016年我们预测自动驾驶会在2020年普及，但至今L5仍未实现。技术替代的时间表从来都比预测更保守，因为经济系统中的摩擦成本被严重低估了。",
+          "speechType": "COUNTER",
+          "sequence": 3
+        }
+      },
+      {
+        "event": "guest_status_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:20.000Z",
+        "payload": {
+          "guestId": "guest-exp-002",
+          "runStatus": "IDLE",
+          "publicThought": ""
+        }
+      },
+      {
+        "event": "consensus_update",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:25.000Z",
+        "payload": {
+          "consensus": [
+            {
+              "id": "cr-001",
+              "content": "各方认同：到2030年，重复性、规则化的白领任务将被大比例自动化，但这是「任务重构」而非「岗位消失」",
+              "relatedSpeechIds": ["speech-001", "speech-002", "speech-003"],
+              "createdAt": "2026-06-20T13:02:25.000Z"
+            }
+          ],
+          "divergence": [
+            {
+              "id": "cr-002",
+              "content": "争论焦点：技术替代的速度——乐观派认为2028年迎来拐点，保守派认为经济摩擦将使进程推迟5-10年",
+              "relatedSpeechIds": ["speech-002", "speech-003"],
+              "createdAt": "2026-06-20T13:02:25.000Z"
+            }
+          ]
+        }
+      },
+      {
+        "event": "new_speech",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:02:28.000Z",
+        "payload": {
+          "id": "speech-004",
+          "guestId": "guest-host-001",
+          "guestName": "张维远",
+          "guestTitle": "《前沿对话》栏目主持人",
+          "guestColor": "#4ECDC4",
+          "content": "感谢各位的精彩发言。今天我们围绕AI替代白领岗位的时间表展开了深入讨论。共识在于重复性任务的自动化不可逆转，分歧在于速度与程度。各位嘉宾用自己的专业视角为我们绘制了一幅立体的未来图景。感谢收看，下期再见。",
+          "speechType": "SUMMARY",
+          "sequence": 4
+        }
+      },
+      {
+        "event": "summary_push",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:15:00.000Z",
+        "payload": {
+          "summary": "本次讨论围绕AI替代白领岗位的时间表展开。共识在于：重复性工作将在5年内大比例自动化，但这不是岗位消失而是任务重构。分歧在于：涉及跨域判断与共情的岗位是否面临实质性威胁。主持人张维远强调，我们过分聚焦于「岗位」替代而忽略了「任务」粒度上的渐进式人机协作。",
+          "totalSpeeches": 42
+        }
+      },
+      {
+        "event": "discussion_state_change",
+        "discussionId": "disc-new-cypress-001",
+        "timestamp": "2026-06-20T13:15:01.000Z",
+        "payload": {
+          "status": "COMPLETED",
+          "previousStatus": "IN_PROGRESS"
+        }
+      }
+    ]
+  },
+
+  "disc2": {
+    "discussionId": "disc-isolation-002",
+    "events": [
+      {
+        "event": "new_speech",
+        "discussionId": "disc-isolation-002",
+        "timestamp": "2026-06-20T13:05:00.000Z",
+        "payload": {
+          "id": "speech-iso-001",
+          "guestId": "guest-iso-host",
+          "guestName": "林晓峰",
+          "guestTitle": "《科技观察》主编",
+          "guestColor": "#2ECC71",
+          "content": "欢迎来到第二场平行讨论：基因编辑的伦理边界在哪里？",
+          "speechType": "OPENING",
+          "sequence": 1
+        }
+      },
+      {
+        "event": "consensus_update",
+        "discussionId": "disc-isolation-002",
+        "timestamp": "2026-06-20T13:05:10.000Z",
+        "payload": {
+          "consensus": [
+            {
+              "id": "cr-iso-001",
+              "content": "共识：基因编辑用于治疗遗传疾病受到广泛认可",
+              "relatedSpeechIds": ["speech-iso-001"],
+              "createdAt": "2026-06-20T13:05:10.000Z"
+            }
+          ],
+          "divergence": []
+        }
+      }
+    ]
+  }
+}
