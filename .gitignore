@@ -19,3 +19,10 @@ out/
 # Environment
 .env
 .env.local
+
+# Database
+*.db
+*.db-journal
+
+# AI assistant artifacts
+.claude/
