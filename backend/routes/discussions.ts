@@ -18,15 +18,23 @@ import {
   discussionIdParamsSchema,
 } from '../schemas/discussion.schema';
 import { createDiscussionController } from '../controllers/discussions';
+import type { SpeechScheduler } from '../services/speech-scheduler';
+import type { DiscussionWsServer } from '../ws/websocket-server';
 
 /**
  * 创建讨论路由
  *
- * @param prisma - Prisma 客户端（依赖注入，便于测试）
+ * @param prisma    - Prisma 客户端（依赖注入，便于测试）
+ * @param scheduler - AI 调度器（可选，生产环境传入以自动生成发言）
+ * @param wsServer  - WebSocket 服务（可选）
  */
-export function createDiscussionRouter(prisma: PrismaClient): Router {
+export function createDiscussionRouter(
+  prisma: PrismaClient,
+  scheduler?: SpeechScheduler,
+  wsServer?: DiscussionWsServer,
+): Router {
   const router = Router();
-  const ctrl = createDiscussionController(prisma);
+  const ctrl = createDiscussionController(prisma, scheduler, wsServer);
 
   // POST /discussions — 创建讨论
   router.post(

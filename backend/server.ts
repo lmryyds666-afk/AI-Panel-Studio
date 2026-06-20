@@ -13,13 +13,21 @@ import { requestLogger } from './middleware/logger';
 import { errorHandler } from './middleware/error-handler';
 import { createDiscussionRouter } from './routes/discussions';
 import { DiscussionWsServer } from './ws/websocket-server';
+import { SpeechScheduler } from './services/speech-scheduler';
+import { createDeepSeekCaller } from './services/guest-generation.service';
 
 /**
  * 创建 Express 应用（不含 HTTP 服务器）
  *
- * @param dbUrl - SQLite 数据库路径（可选，测试时传入 test.db）
+ * @param dbUrl    - SQLite 数据库路径（可选，测试时传入 test.db）
+ * @param wsServer - WebSocket 服务实例（可选，生产环境传入）
+ * @param scheduler - AI 调度器实例（可选，生产环境传入）
  */
-export function createApp(dbUrl?: string) {
+export function createApp(
+  dbUrl?: string,
+  wsServer?: DiscussionWsServer,
+  scheduler?: SpeechScheduler,
+) {
   const prisma = createPrismaClient(dbUrl);
   const app = express();
 
@@ -29,7 +37,7 @@ export function createApp(dbUrl?: string) {
   app.use(requestLogger);
 
   // 路由挂载
-  app.use('/api', createDiscussionRouter(prisma));
+  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer));
 
   // 健康检查
   app.get('/health', (_req, res) => {
@@ -43,19 +51,39 @@ export function createApp(dbUrl?: string) {
 }
 
 /**
- * 创建完整服务（Express + HTTP Server + WebSocket）
+ * 创建完整服务（Express + HTTP Server + WebSocket + AI 调度器）
  *
- * 用于生产启动，将 Socket.IO 挂载到 HTTP 服务器上。
- * WebSocket 通过 DiscussionWsServer 的 broadcast* 方法推送实时事件。
+ * 用于生产启动，串联所有核心组件。
  *
- * @returns { app, httpServer, wsServer } — 供监听启动与外部推送使用
+ * @returns { app, httpServer, wsServer, scheduler } — 供监听启动与外部调用
  */
 export function createServer(dbUrl?: string) {
-  const app = createApp(dbUrl);
+  // 1. 基础设施
+  const prisma = createPrismaClient(dbUrl);
+  const app = express();
+
+  app.use(cors());
+  app.use(express.json());
+  app.use(requestLogger);
+
+  // 2. HTTP + WebSocket
   const httpServer = http.createServer(app);
   const wsServer = new DiscussionWsServer(httpServer);
 
-  return { app, httpServer, wsServer };
+  // 3. AI 调度器
+  const callAI = createDeepSeekCaller();
+  const scheduler = new SpeechScheduler(prisma, callAI, wsServer);
+
+  // 4. 路由（注入所有依赖）
+  app.use('/api', createDiscussionRouter(prisma, scheduler, wsServer));
+
+  // 5. 健康检查 + 错误处理
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+  app.use(errorHandler);
+
+  return { app, httpServer, wsServer, scheduler };
 }
 
 // ─── 直接启动 ────────────────────────────────────────

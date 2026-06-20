@@ -10,6 +10,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { PrismaClient } from '@prisma/client';
 import { AppError } from '../types/errors';
+import type { SpeechScheduler } from '../services/speech-scheduler';
+import type { DiscussionWsServer } from '../ws/websocket-server';
 
 /**
  * 标准化成功响应
@@ -23,11 +25,67 @@ function success<T>(res: Response, data: T, statusCode = 200): void {
 }
 
 /**
+ * 背景运行 AI 讨论调度循环
+ *
+ * 在 confirmGuests 后异步启动，不阻塞 HTTP 响应。
+ * 按自然节奏（3-8 秒间隔）连续生成发言，直到达到最大轮数。
+ */
+async function runDiscussionLoop(
+  discussionId: string,
+  scheduler: SpeechScheduler,
+  wsServer: DiscussionWsServer,
+  prisma: PrismaClient,
+) {
+  try {
+    // 1. 启动讨论 → 生成主持人开场
+    await scheduler.startDiscussion(discussionId);
+    console.log(`[Scheduler] 讨论 ${discussionId} 开场发言已生成`);
+
+    // 2. 循环生成后续发言（最多 12 轮，模拟完整讨论）
+    const MAX_ROUNDS = 12;
+    for (let i = 0; i < MAX_ROUNDS; i++) {
+      // 模拟自然讨论节奏：3-8 秒间隔
+      const delay = 3000 + Math.floor(Math.random() * 5000);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+
+      // 检查讨论是否已被手动结束
+      const ctx = scheduler.getContext(discussionId);
+      if (!ctx || ctx.status === 'COMPLETED') {
+        console.log(`[Scheduler] 讨论 ${discussionId} 已结束，停止调度`);
+        return;
+      }
+
+      const speech = await scheduler.scheduleNext(discussionId);
+      if (!speech) {
+        // 达到最大发言数，自动结束
+        console.log(`[Scheduler] 讨论 ${discussionId} 达到最大发言数，自动结束`);
+        break;
+      }
+    }
+
+    // 3. 自动结束讨论 → 生成总结
+    if (scheduler.getContext(discussionId)?.status === 'IN_PROGRESS') {
+      await scheduler.endDiscussion(discussionId);
+      console.log(`[Scheduler] 讨论 ${discussionId} 已自动结束`);
+    }
+  } catch (err) {
+    console.error(`[Scheduler] 讨论 ${discussionId} 调度异常：`, (err as Error).message);
+    // 尽量清理上下文
+    try { scheduler.destroyContext(discussionId); } catch { /* ignore */ }
+  }
+}
+
+/**
  * 创建讨论控制器工厂
  *
- * 通过闭包注入 PrismaClient，便于测试时替换为测试数据库。
+ * 通过闭包注入 PrismaClient、SpeechScheduler、DiscussionWsServer。
+ * scheduler / wsServer 仅在生产环境传入，测试时可为 undefined。
  */
-export function createDiscussionController(prisma: PrismaClient) {
+export function createDiscussionController(
+  prisma: PrismaClient,
+  scheduler?: SpeechScheduler,
+  wsServer?: DiscussionWsServer,
+) {
   // ══════════════════════════════════════════════════
   // 1. 创建讨论
   // ══════════════════════════════════════════════════
@@ -109,6 +167,11 @@ export function createDiscussionController(prisma: PrismaClient) {
         guests: {
           orderBy: { sortOrder: 'asc' },
         },
+        speeches: {
+          orderBy: { sequence: 'asc' },
+          where: { isVisible: true },
+          include: { guest: true },
+        },
         _count: {
           select: {
             speeches: true,
@@ -128,6 +191,11 @@ export function createDiscussionController(prisma: PrismaClient) {
         id: string; name: string; role: string; occupation: string;
         title: string; stance: string; color: string; runStatus: string;
         sortOrder: number;
+      }>;
+      speeches: Array<{
+        id: string; guestId: string; content: string; speechType: string;
+        sequence: number; isVisible: boolean; createdAt: Date;
+        guest: { id: string; name: string; title: string; color: string };
       }>;
       _count: { speeches: number; consensusRecords: number };
     };
@@ -156,6 +224,17 @@ export function createDiscussionController(prisma: PrismaClient) {
         color: g.color,
         runStatus: g.runStatus,
         sortOrder: g.sortOrder,
+      })),
+      speeches: disc.speeches.map((s) => ({
+        id: s.id,
+        guestId: s.guestId,
+        guestName: s.guest.name,
+        guestTitle: s.guest.title,
+        guestColor: s.guest.color,
+        content: s.content,
+        speechType: s.speechType,
+        sequence: s.sequence,
+        createdAt: s.createdAt.toISOString(),
       })),
       speechCount: disc._count.speeches,
       consensusCount,
@@ -262,6 +341,11 @@ export function createDiscussionController(prisma: PrismaClient) {
       data: { status: 'IN_PROGRESS' },
     });
 
+    // 背景启动 AI 讨论调度循环（不阻塞响应）
+    if (scheduler && wsServer) {
+      runDiscussionLoop(id, scheduler, wsServer, prisma);
+    }
+
     success(res, {
       id: updated.id,
       status: updated.status,
@@ -287,8 +371,22 @@ export function createDiscussionController(prisma: PrismaClient) {
       );
     }
 
-    // MVP: 直接结束，summary 后续由 AI 调度服务异步生成
-    const updated = await prisma.discussion.update({
+    // 若调度器上下文存在，通过调度器生成总结；否则直接结束
+    let updated;
+    if (scheduler?.getContext(id)?.status === 'IN_PROGRESS') {
+      const speech = await scheduler.endDiscussion(id);
+      updated = await prisma.discussion.findUnique({ where: { id } })!;
+      // 广播已由 scheduler.endDiscussion 完成
+      success(res, {
+        id: updated!.id,
+        status: 'COMPLETED',
+        summary: speech.content,
+        updatedAt: new Date().toISOString(),
+      });
+      return;
+    }
+
+    updated = await prisma.discussion.update({
       where: { id },
       data: { status: 'COMPLETED' },
     });
