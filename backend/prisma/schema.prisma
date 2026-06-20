@@ -1,0 +1,99 @@
+// ─── 数据源 & 生成器 ────────────────────────────
+  datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL") // 默认 file:./dev.db
+  }
+
+  generator client {
+    provider = "prisma-client-js"
+  }
+
+  // ─── Discussion：讨论 ──────────────────────────
+  model Discussion {
+    id           String   @id @default(uuid())
+    topic        String                              // 讨论话题
+    status       String   @default("SETUP")           // SETUP | IN_PROGRESS |
+  COMPLETED
+    expertCount  Int      @default(4)                 // 专家人数（用户指定）
+    summary      String?                              // 主持人总结（结束填充）
+
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    guests            Guest[]            // 参会嘉宾（含主持人）
+    speeches          Speech[]           // 发言记录
+    consensusRecords  ConsensusRecord[]  // 共识 / 分歧记录
+
+    @@map("discussions")
+  }
+
+  // ─── Guest：嘉宾（主持人与专家统一建模）─────────
+  model Guest {
+    id           String   @id @default(uuid())
+    discussionId String                              // 所属讨论 FK
+    name         String                              // 姓名
+    role         String   @default("EXPERT")          // HOST | EXPERT
+    occupation   String                              // 职业
+    title        String                              // 头衔 / Title
+    stance       String                              // 立场描述
+    color        String                              // 专属颜色 HEX（如 #FF6B6B）
+    runStatus    String   @default("IDLE")            // IDLE | PREPARING |
+  SPEAKING
+    sortOrder    Int      @default(0)                 // 展示排序（主持人=0）
+
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    discussion Discussion @relation(fields: [discussionId], references: [id],
+  onDelete: Cascade)
+    speeches   Speech[]   // 该嘉宾的所有发言
+
+    @@index([discussionId])
+    @@map("guests")
+  }
+
+  // ─── Speech：发言记录 ──────────────────────────
+  model Speech {
+    id           String   @id @default(uuid())
+    discussionId String                              // 所属讨论 FK
+    guestId      String                              // 发言人 FK
+    content      String                              // 发言内容
+    speechType   String                              // OPENING | FOLLOW_UP |
+  BRIDGING | ANSWER | SUPPLEMENT | COUNTER | SUMMARY
+    sequence     Int                                 // 全局递增序号
+    isVisible    Boolean  @default(true)              // 是否在 Transcript
+  展示（举手等内部事件=false）
+
+    createdAt    DateTime @default(now())
+
+    discussion Discussion @relation(fields: [discussionId], references: [id],
+  onDelete: Cascade)
+    guest      Guest      @relation(fields: [guestId], references: [id], onDelete:
+  Cascade)
+
+    @@index([discussionId])
+    @@index([guestId])
+    @@index([discussionId, sequence])
+    @@map("speeches")
+  }
+
+  // ─── ConsensusRecord：共识 / 分歧记录 ──────────
+  model ConsensusRecord {
+    id               String   @id @default(uuid())
+    discussionId     String                                       // 所属讨论 FK
+    recordType       String                                       // CONSENSUS |
+  DIVERGENCE
+    content          String                                       // 共识或分歧内容
+    relatedSpeechIds String   @default("[]")                      // 关联 Speech ID
+  列表（JSON 字符串）
+
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+
+    discussion Discussion @relation(fields: [discussionId], references: [id],
+  onDelete: Cascade)
+
+    @@index([discussionId])
+    @@index([discussionId, recordType])
+    @@map("consensus_records")
+  }
