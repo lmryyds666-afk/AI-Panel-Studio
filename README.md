@@ -1,6 +1,6 @@
 #  AI Panel Studio — AI 圆桌讨论演播厅
 
-> 输入话题 + 专家人数 → AI 自动生成主持人与专家阵容 → 进入演播厅观看 AI 实时驱动的高质量圆桌讨论。
+> 输入话题 + 专家人数 → AI 自动生成主持人与专家阵容 → 进入演播厅观看 AI 实时驱动的高质量圆桌讨论。演示图片附在最下面
 
 **AI Panel Studio** 是一份远程实习作业成果——一款基于 DeepSeek 大模型的 AI 圆桌讨论 Web App，支持多讨论并行隔离，实时展示发言 Transcript、嘉宾状态动画、共识/分歧智能提炼。
 
@@ -357,6 +357,4 @@ npx prisma studio
 <img width="1900" height="971" alt="image" src="https://github.com/user-attachments/assets/cd4d9c77-05c1-4b47-9b6b-f28935136af9" />
 
 
-## 📄 License
 
-MIT
