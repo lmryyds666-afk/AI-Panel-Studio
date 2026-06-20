@@ -352,6 +352,9 @@ Prisma 自带的**网页版数据库可视化工具**，专门用来查看、修
 npx prisma studio
 ```
 
+<img width="1877" height="965" alt="image" src="https://github.com/user-attachments/assets/ab933d33-f26c-40b5-a06a-412a3aca7e47" />
+<img width="1889" height="968" alt="image" src="https://github.com/user-attachments/assets/48d27ffb-2226-4396-9561-065e34e3c9f2" />
+<img width="1900" height="971" alt="image" src="https://github.com/user-attachments/assets/cd4d9c77-05c1-4b47-9b6b-f28935136af9" />
 
 
 ## 📄 License
