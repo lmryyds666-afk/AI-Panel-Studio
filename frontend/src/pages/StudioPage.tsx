@@ -259,7 +259,7 @@ const SpeechBubble: React.FC<{ speech: Speech; isHighlighted?: boolean }> = ({
   return (
     <div
       data-testid="speech-bubble"
-      className={`flex gap-3 px-4 py-3 border-b border-white/5 bg-slate-800/65 hover:bg-slate-700/50 transition-colors ${
+      className={`flex gap-4 px-5 py-3.5 mb-3 bg-slate-900/85 hover:bg-slate-800/75 rounded-xl transition-colors shadow-md ${
         isHighlighted ? 'animate-highlight-flash' : ''
       }`}
     >
