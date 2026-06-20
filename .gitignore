@@ -1,0 +1,21 @@
+# WorkBuddy
+.workbuddy/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+
+# Build output
+dist/
+build/
+out/
+
+# Environment
+.env
+.env.local
