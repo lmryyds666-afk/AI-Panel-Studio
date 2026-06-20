@@ -73,13 +73,13 @@ export const SPEECH_TYPE_LABEL_MAP: Record<SpeechType, string> = {
 };
 
 export const SPEECH_TYPE_COLOR_MAP: Record<SpeechType, string> = {
-  OPENING: 'bg-amber-500 text-amber-950',
-  FOLLOW_UP: 'bg-sky-500 text-sky-950',
-  BRIDGING: 'bg-purple-500 text-purple-950',
-  ANSWER: 'bg-blue-500 text-blue-950',
-  SUPPLEMENT: 'bg-emerald-500 text-emerald-950',
-  COUNTER: 'bg-red-500 text-red-950',
-  SUMMARY: 'bg-violet-500 text-violet-950',
+  OPENING: 'bg-amber-400/20 text-amber-300',
+  FOLLOW_UP: 'bg-sky-400/20 text-sky-300',
+  BRIDGING: 'bg-purple-400/20 text-purple-300',
+  ANSWER: 'bg-blue-400/20 text-blue-300',
+  SUPPLEMENT: 'bg-emerald-400/20 text-emerald-300',
+  COUNTER: 'bg-red-400/20 text-red-300',
+  SUMMARY: 'bg-violet-400/20 text-violet-300',
 };
 
 // ─── 分页 ────────────────────────────────────────────

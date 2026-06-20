@@ -19,7 +19,7 @@ import type { Guest } from '../types';
 // ════════════════════════════════════════════════════════
 
 const TopicCard: React.FC<{ topic: string; expertCount: number }> = ({ topic, expertCount }) => (
-  <div data-testid="topic-card" className="bg-slate-800/60 border border-slate-700 rounded-lg p-5">
+  <div data-testid="topic-card" className="glass-panel rounded-lg p-5">
     <div className="flex items-start gap-3">
       <span className="text-2xl">💬</span>
       <div className="flex-1">
@@ -43,7 +43,7 @@ const GuestProfileCard: React.FC<{ guest: Guest }> = ({ guest }) => {
   return (
     <div
       data-testid="guest-card"
-      className="guest-card bg-slate-800/80 border border-slate-700/60 rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+      className="guest-card glass-panel rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
     >
       {/* 顶部色条 */}
       <div className="h-1.5" style={{ backgroundColor: guest.color }} />
@@ -66,7 +66,7 @@ const GuestProfileCard: React.FC<{ guest: Guest }> = ({ guest }) => {
         <p className="text-xs text-slate-500 mb-2">{guest.occupation}</p>
 
         {/* 立场 */}
-        <p className="text-xs text-slate-400 italic leading-relaxed border-t border-slate-700/50 pt-2 mt-2">
+        <p className="text-xs text-slate-400 italic leading-relaxed border-t border-white/5 pt-2 mt-2">
           「{guest.stance}」
         </p>
       </div>
@@ -132,20 +132,20 @@ const RegenerateButton: React.FC<{
 
       {/* 二次确认弹窗 */}
       {showConfirm && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 rounded-xl border border-slate-600 p-6 max-w-sm mx-4 shadow-2xl">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/45 backdrop-blur-md">
+          <div className="glass-modal rounded-xl p-6 max-w-sm mx-4">
             <p className="text-white font-medium mb-2">确认重新生成？</p>
             <p className="text-sm text-slate-400 mb-5">将丢弃当前阵容并通过 AI 重新生成嘉宾。</p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 text-sm text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
               >
                 取消
               </button>
               <button
                 onClick={handleRegenerate}
-                className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm font-medium text-white bg-amber-500/85 hover:bg-amber-500 rounded-lg transition-colors cursor-pointer"
               >
                 确定
               </button>
@@ -184,7 +184,7 @@ const ConfirmButton: React.FC<{ discussionId: string; disabled: boolean }> = ({
       data-testid="confirm-button"
       onClick={handleConfirm}
       disabled={disabled || state.isConfirming}
-      className="px-6 py-3 text-sm font-bold text-white bg-green-600 hover:bg-green-500 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-green-600/20"
+      className="px-6 py-3 text-sm font-bold text-white bg-emerald-500/85 hover:bg-emerald-500 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20"
     >
       {state.isConfirming ? '确认中...' : '✅ 确认并进入演播厅'}
     </button>
@@ -229,7 +229,7 @@ const GuestSetupPage: React.FC = () => {
 
   if (state.isLoading) {
     return (
-      <div className="min-h-screen bg-slate-900">
+      <div className="min-h-screen">
         <PageHeader title="嘉宾配置" onBack={() => navigate('/')} />
         <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
           <LoadingSkeleton variant="card" count={1} />
@@ -243,7 +243,7 @@ const GuestSetupPage: React.FC = () => {
 
   if (state.error && !state.discussion) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 text-lg mb-2">⚠ {state.error}</p>
           <button
@@ -261,14 +261,14 @@ const GuestSetupPage: React.FC = () => {
 
   if (state.discussion && state.discussion.status !== 'SETUP') {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-400 text-lg mb-2">
             ⚠ 当前讨论状态为「{state.discussion.status}」，不支持嘉宾配置
           </p>
           <button
             onClick={() => navigate(`/studio/${discussionId}`)}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors cursor-pointer mt-3"
+            className="px-4 py-2 bg-indigo-500/85 hover:bg-indigo-500 text-white rounded-lg transition-colors cursor-pointer mt-3"
           >
             进入演播厅
           </button>
@@ -282,7 +282,7 @@ const GuestSetupPage: React.FC = () => {
   const hasGuests = state.guests.length > 0;
 
   return (
-    <div data-testid="guest-setup-page" className="min-h-screen bg-slate-900">
+    <div data-testid="guest-setup-page" className="min-h-screen">
       <PageHeader
         title="嘉宾配置"
         subtitle={state.discussion?.topic ?? ''}
@@ -318,7 +318,7 @@ const GuestSetupPage: React.FC = () => {
 
         {/* 操作按钮 */}
         {!state.isGenerating && state.guests.length > 0 && (
-          <div className="flex justify-between items-center pt-4 border-t border-slate-700/50">
+          <div className="flex justify-between items-center pt-4 border-t border-white/5">
             <RegenerateButton
               discussionId={discussionId!}
               onSuccess={(guests) => {
@@ -337,7 +337,7 @@ const GuestSetupPage: React.FC = () => {
             <button
               data-testid="generate-button"
               onClick={() => discussionId && generateGuests(discussionId)}
-              className="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors cursor-pointer"
+              className="px-5 py-2.5 text-sm font-medium text-white bg-indigo-500/85 hover:bg-indigo-500 rounded-lg transition-colors cursor-pointer"
             >
               生成嘉宾
             </button>

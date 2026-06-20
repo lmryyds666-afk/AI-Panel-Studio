@@ -1,186 +1,207 @@
 /**
  * AI Panel Studio — 全局样式
  *
- * Tailwind CSS v4 入口 + 自定义动画 keyframes。
+ * Tailwind CSS v4 入口 + 玻璃拟态系统 + 自定义动画。
+ * 视觉基调：长白山天池自然风光 + 半透磨砂玻璃遮罩。
  */
-
 @import 'tailwindcss';
 
-/* ─── 自定义主题变量 ────────────────────────────────── */
-
+/* ─── 自定义主题变量（柔化自然色调）────────────────── */
 @theme {
-  --color-studio-bg: #0f172a;
-  --color-studio-panel: #1e293b;
-  --color-studio-border: #334155;
-  --color-studio-text: #e2e8f0;
+  --color-studio-bg: rgba(15, 23, 42, 0.55);
+  --color-studio-panel: rgba(15, 23, 42, 0.72);
+  --color-studio-border: rgba(148, 163, 184, 0.12);
+  --color-studio-text: #f1f5f9;
   --color-studio-muted: #94a3b8;
 }
 
-/* ─── 呼吸灯动画（状态指示灯）───────────────────────── */
+/* ─── 全屏固定背景（长白山天池）────────────────────── */
+body {
+  margin: 0;
+  background: none;
+}
 
+.bg-nature {
+  background-image: url('/images/changbaishan.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* 半透明色调遮罩层 */
+.bg-glass-overlay {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+/* ════════════════════════════════════════════════════════
+   玻璃拟态系统（Glass Morphism）
+   ════════════════════════════════════════════════════════ */
+
+/* 标准玻璃面板 — 卡片、面板、标题栏 */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* 轻玻璃 — 内嵌区域、子面板 */
+.glass-panel-light {
+  background: rgba(30, 41, 59, 0.50);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* 重玻璃 — 模态框、弹窗 */
+.glass-modal {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.40);
+}
+
+/* 玻璃按钮 */
+.glass-btn {
+  background: rgba(99, 102, 241, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(99, 102, 241, 0.20);
+  color: #e0e7ff;
+  transition: all 0.2s ease;
+}
+.glass-btn:hover {
+  background: rgba(99, 102, 241, 0.50);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+/* 全局页脚 */
+.footer-text {
+  color: rgba(241, 245, 249, 0.45);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+  padding: 1rem 1rem 1.25rem;
+  letter-spacing: 0.025em;
+}
+
+/* 右上角浮空返回首页按钮 */
+.floating-home-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  background: rgba(139, 92, 246, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.30);
+  color: #ede9fe;
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 16px rgba(139, 92, 246, 0.20);
+}
+.floating-home-btn:hover {
+  background: rgba(139, 92, 246, 0.60);
+  border-color: rgba(139, 92, 246, 0.50);
+  box-shadow: 0 4px 24px rgba(139, 92, 246, 0.35);
+}
+.floating-home-btn:active {
+  transform: scale(0.96);
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .floating-home-btn {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+/* ─── 呼吸灯动画 ──────────────────────────────────── */
 @keyframes breathe {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 @keyframes breathe-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.15);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.15); }
 }
 
-/* ─── 脉冲动画（PREPARING 状态）────────────────────── */
-
+/* ─── 脉冲动画（PREPARING 状态）───────────────────── */
 @keyframes pulse-dot {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(250, 204, 21, 0);
-  }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(250, 204, 21, 0); }
 }
 
 /* ─── 打字机光标闪烁 ──────────────────────────────── */
-
 @keyframes blink-caret {
-  0%,
-  100% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: currentColor;
-  }
+  0%, 100% { border-color: transparent; }
+  50% { border-color: currentColor; }
 }
 
-/* ─── 渐入动画（新发言 / 新共识）──────────────────── */
-
+/* ─── 渐入动画 ────────────────────────────────────── */
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* ─── 高亮闪烁（Transcript 跳转定位）───────────────── */
-
+/* ─── 高亮闪烁（Transcript 跳转定位）─────────────── */
 @keyframes highlight-flash {
-  0% {
-    background-color: rgba(254, 240, 138, 0.5);
-  }
-  100% {
-    background-color: transparent;
-  }
+  0% { background-color: rgba(254, 240, 138, 0.5); }
+  100% { background-color: transparent; }
 }
 
 /* ─── 辉光扩散（SPEAKING 状态）────────────────────── */
-
 @keyframes glow-spread {
-  0%,
-  100% {
-    box-shadow: 0 0 4px var(--glow-color, #4ade80);
-  }
-  50% {
-    box-shadow: 0 0 16px var(--glow-color, #4ade80), 0 0 32px var(--glow-color, #4ade80);
-  }
+  0%, 100% { box-shadow: 0 0 4px var(--glow-color, #4ade80); }
+  50% { box-shadow: 0 0 16px var(--glow-color, #4ade80), 0 0 32px var(--glow-color, #4ade80); }
 }
 
 /* ─── Toast 滑入 ──────────────────────────────────── */
-
 @keyframes slide-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── 工具类 ──────────────────────────────────────── */
-
-.animate-breathe {
-  animation: breathe 2s ease-in-out infinite;
-}
-
-.animate-breathe-pulse {
-  animation: breathe-pulse 1.5s ease-in-out infinite;
-}
-
-.animate-pulse-dot {
-  animation: pulse-dot 1.2s ease-in-out infinite;
-}
-
-.animate-blink-caret {
-  animation: blink-caret 0.8s step-end infinite;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.3s ease-out;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-.animate-highlight-flash {
-  animation: highlight-flash 1.5s ease-out;
-}
-
-.animate-glow-spread {
-  animation: glow-spread 2s ease-in-out infinite;
-}
-
-.animate-slide-in-down {
-  animation: slide-in-down 0.3s ease-out;
-}
+/* ─── 动画工具类 ──────────────────────────────────── */
+.animate-breathe { animation: breathe 2s ease-in-out infinite; }
+.animate-breathe-pulse { animation: breathe-pulse 1.5s ease-in-out infinite; }
+.animate-pulse-dot { animation: pulse-dot 1.2s ease-in-out infinite; }
+.animate-blink-caret { animation: blink-caret 0.8s step-end infinite; }
+.animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
+.animate-fade-in { animation: fade-in 0.3s ease-out; }
+.animate-highlight-flash { animation: highlight-flash 1.5s ease-out; }
+.animate-glow-spread { animation: glow-spread 2s ease-in-out infinite; }
+.animate-slide-in-down { animation: slide-in-down 0.3s ease-out; }
 
 /* ─── 演播厅滚动条美化 ────────────────────────────── */
-
-.studio-scrollbar::-webkit-scrollbar {
-  width: 5px;
-}
-
-.studio-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+.studio-scrollbar::-webkit-scrollbar { width: 5px; }
+.studio-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .studio-scrollbar::-webkit-scrollbar-thumb {
-  background: #475569;
+  background: rgba(148, 163, 184, 0.25);
   border-radius: 3px;
 }
-
 .studio-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  background: rgba(148, 163, 184, 0.45);
 }
 
 /* ─── 行截断工具类 ──────────────────────────────── */
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

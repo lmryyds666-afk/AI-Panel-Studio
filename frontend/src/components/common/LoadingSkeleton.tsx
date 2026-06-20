@@ -18,39 +18,39 @@ interface LoadingSkeletonProps {
 }
 
 const CardSkeleton: React.FC = () => (
-  <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50 animate-pulse">
+  <div className="glass-panel-light rounded-lg p-4 animate-pulse">
     <div className="flex items-center gap-3 mb-3">
-      <div className="w-3 h-3 rounded-full bg-slate-600" />
-      <div className="h-4 bg-slate-600 rounded w-1/3" />
-      <div className="h-6 bg-slate-600 rounded-full w-16 ml-auto" />
+      <div className="w-3 h-3 rounded-full bg-white/15" />
+      <div className="h-4 bg-white/15 rounded w-1/3" />
+      <div className="h-6 bg-white/15 rounded-full w-16 ml-auto" />
     </div>
     <div className="space-y-2">
-      <div className="h-5 bg-slate-600 rounded w-full" />
-      <div className="h-5 bg-slate-600 rounded w-2/3" />
+      <div className="h-5 bg-white/15 rounded w-full" />
+      <div className="h-5 bg-white/15 rounded w-2/3" />
     </div>
     <div className="flex gap-4 mt-3">
-      <div className="h-3 bg-slate-700 rounded w-20" />
-      <div className="h-3 bg-slate-700 rounded w-24" />
+      <div className="h-3 bg-white/8 rounded w-20" />
+      <div className="h-3 bg-white/8 rounded w-24" />
     </div>
   </div>
 );
 
 const BubbleSkeleton: React.FC = () => (
   <div className="flex gap-3 p-3 animate-pulse">
-    <div className="w-2 rounded-full bg-slate-600 flex-shrink-0" />
+    <div className="w-2 rounded-full bg-white/15 flex-shrink-0" />
     <div className="flex-1 space-y-2">
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-slate-600" />
-        <div className="h-3 bg-slate-600 rounded w-24" />
+        <div className="w-6 h-6 rounded-full bg-white/15" />
+        <div className="h-3 bg-white/15 rounded w-24" />
       </div>
-      <div className="h-4 bg-slate-600 rounded w-full" />
-      <div className="h-4 bg-slate-600 rounded w-4/5" />
+      <div className="h-4 bg-white/15 rounded w-full" />
+      <div className="h-4 bg-white/15 rounded w-4/5" />
     </div>
   </div>
 );
 
 const LineSkeleton: React.FC = () => (
-  <div className="h-4 bg-slate-600 rounded animate-pulse w-full" />
+  <div className="h-4 bg-white/15 rounded animate-pulse w-full" />
 );
 
 const skeletons: Record<string, React.FC> = {

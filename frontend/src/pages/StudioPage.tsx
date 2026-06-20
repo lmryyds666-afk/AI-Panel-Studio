@@ -35,6 +35,7 @@ const StudioHeader: React.FC = () => {
   const [showEndConfirm, setShowEndConfirm] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
   const { discussionId } = useParams<{ discussionId: string }>();
+  const navigate = useNavigate();
 
   const isLive = state.status === 'IN_PROGRESS';
   const isCompleted = state.status === 'COMPLETED';
@@ -57,9 +58,17 @@ const StudioHeader: React.FC = () => {
     <>
       <header
         data-testid="studio-header"
-        className="bg-gradient-to-r from-gray-900 via-slate-900 to-gray-900 border-b border-slate-700 px-6 py-3"
+        className="glass-panel border-b border-white/10 px-6 py-3 sticky top-0 z-30"
       >
         <div className="flex items-center gap-4">
+          {/* 返回首页按钮 */}
+          <button
+            onClick={() => navigate('/')}
+            className="px-4 py-1.5 text-sm font-medium text-indigo-400 border border-indigo-500/50 hover:bg-indigo-500/10 rounded-lg transition-colors cursor-pointer flex-shrink-0"
+          >
+            ← 返回首页
+          </button>
+
           {/* 状态指示灯 */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {isLive && (
@@ -80,18 +89,9 @@ const StudioHeader: React.FC = () => {
           </div>
 
           {/* 标题 */}
-          <h2 className="text-white text-lg font-bold truncate flex-1">{state.topic}</h2>
+          <h2 className="text-slate-100 text-lg font-bold truncate flex-1">{state.topic}</h2>
 
-          {/* 状态标签 */}
-          <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ${
-            isLive ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-            isCompleted ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
-            'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-          }`}>
-            {isLive ? 'IN_PROGRESS' : isCompleted ? 'COMPLETED' : 'SETUP'}
-          </span>
-
-          {/* 结束按钮（仅 IN_PROGRESS 状态显示） */}
+          {/* 结束讨论按钮（仅 IN_PROGRESS 状态显示） */}
           {isLive && (
             <button
               onClick={() => setShowEndConfirm(true)}
@@ -106,20 +106,20 @@ const StudioHeader: React.FC = () => {
 
       {/* 结束确认弹窗 */}
       {showEndConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 rounded-xl border border-slate-600 p-6 max-w-sm mx-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-md">
+          <div className="glass-modal rounded-xl p-6 max-w-sm mx-4">
             <p className="text-white font-medium mb-2">确定结束当前讨论？</p>
             <p className="text-sm text-slate-400 mb-5">讨论将进入 COMPLETED 状态，不可恢复。</p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowEndConfirm(false)}
-                className="px-4 py-2 text-sm text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
               >
                 取消
               </button>
               <button
                 onClick={handleEnd}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-500 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-sm font-medium text-white bg-rose-500/85 hover:bg-rose-500 rounded-lg transition-colors cursor-pointer"
               >
                 确定
               </button>
@@ -154,7 +154,7 @@ const GuestStatusCard: React.FC<{ guest: GuestRuntime }> = ({ guest }) => {
   return (
     <div
       data-testid="guest-card"
-      className={`guest-card bg-slate-800/80 border border-slate-700/60 rounded-lg overflow-hidden transition-all duration-300 ${cardGlowClass}`}
+      className={`guest-card glass-panel-light rounded-lg overflow-hidden transition-all duration-300 ${cardGlowClass}`}
       style={runStatus === 'SPEAKING' ? { ['--glow-color' as string]: guest.color } : undefined}
     >
       {/* 左侧色条 */}
@@ -213,14 +213,14 @@ const GuestPanel: React.FC = () => {
   return (
     <aside
       data-testid="guest-panel"
-      className="guest-panel bg-slate-900/50 border-r border-slate-700/50 overflow-y-auto studio-scrollbar p-3"
+      className="guest-panel glass-panel-light border-r border-white/5 overflow-y-auto studio-scrollbar p-3"
     >
-      <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">
+      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">
         🎭 嘉宾
       </h3>
 
       {guests.length === 0 && (
-        <p className="text-xs text-slate-600 text-center py-8">等待嘉宾入场...</p>
+        <p className="text-xs text-slate-500 text-center py-8">等待嘉宾入场...</p>
       )}
 
       {/* 主持人 */}
@@ -228,8 +228,8 @@ const GuestPanel: React.FC = () => {
         <div className="mb-3">
           <GuestStatusCard guest={host} />
           {experts.length > 0 && (
-            <div className="mt-3 mb-2 border-t border-slate-700/30 pt-2">
-              <span className="text-[10px] text-slate-600 px-1">专家</span>
+            <div className="mt-3 mb-2 border-t border-white/5 pt-2">
+              <span className="text-[10px] text-slate-500 px-1">专家</span>
             </div>
           )}
         </div>
@@ -259,7 +259,7 @@ const SpeechBubble: React.FC<{ speech: Speech; isHighlighted?: boolean }> = ({
   return (
     <div
       data-testid="speech-bubble"
-      className={`flex gap-3 px-4 py-3 border-b border-slate-700/30 hover:bg-slate-800/30 transition-colors ${
+      className={`flex gap-3 px-4 py-3 border-b border-white/5 bg-slate-800/65 hover:bg-slate-700/50 transition-colors ${
         isHighlighted ? 'animate-highlight-flash' : ''
       }`}
     >
@@ -324,7 +324,7 @@ const TranscriptPanel: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col min-h-0">
       {/* 面板标题 */}
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-900/80 border-b border-slate-700/50 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-2 glass-panel-light border-b border-white/5 flex-shrink-0">
         <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
           📝 发言记录
         </h3>
@@ -354,16 +354,16 @@ const TranscriptPanel: React.FC = () => {
 
         {/* 讨论结束分隔线 */}
         {isCompleted && state.speeches.length > 0 && (
-          <div className="flex items-center gap-3 px-4 py-6 text-slate-600 text-sm">
-            <div className="flex-1 border-t border-slate-700/50" />
+          <div className="flex items-center gap-3 px-4 py-6 text-slate-500 text-sm">
+            <div className="flex-1 border-t border-white/5" />
             <span className="flex-shrink-0">── 讨论结束 ──</span>
-            <div className="flex-1 border-t border-slate-700/50" />
+            <div className="flex-1 border-t border-white/5" />
           </div>
         )}
 
         {/* 总结展示 */}
         {state.summary && (
-          <div className="mx-4 my-3 p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-lg">
+          <div className="mx-4 my-3 p-4 bg-indigo-400/8 border border-indigo-400/20 rounded-lg">
             <p className="text-xs text-indigo-400 font-semibold mb-2">📋 主持人总结</p>
             <p className="text-sm text-slate-300 leading-relaxed">{state.summary}</p>
           </div>
@@ -379,7 +379,7 @@ const TranscriptPanel: React.FC = () => {
               containerRef.current.scrollTop = containerRef.current.scrollHeight;
             }
           }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 text-xs font-medium text-white bg-indigo-600/90 hover:bg-indigo-500 rounded-full shadow-lg backdrop-blur-sm cursor-pointer transition-colors"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 text-xs font-medium text-white bg-indigo-500/85 hover:bg-indigo-500 rounded-full shadow-lg backdrop-blur-sm cursor-pointer transition-colors"
           style={{ position: 'fixed', bottom: '1rem' }}
         >
           ↓ 回到底部
@@ -423,7 +423,7 @@ const InsightCard: React.FC<{
           <button
             key={sid}
             onClick={() => onSpeechClick?.(sid)}
-            className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700/50 text-indigo-400 hover:bg-slate-700 hover:text-indigo-300 transition-colors cursor-pointer"
+            className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-indigo-400 hover:bg-white/20 hover:text-indigo-300 transition-colors cursor-pointer"
             title={`跳转到发言 #${sid.slice(0, 8)}`}
           >
             #{sid.slice(0, 8)}
@@ -450,7 +450,7 @@ const ConsensusSection: React.FC<{
     data-testid={type === 'consensus' ? 'consensus-section' : 'divergence-section'}
     className="flex-1 flex flex-col min-h-0"
   >
-    <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/60 border-b border-slate-700/30 flex-shrink-0">
+    <div className="flex items-center gap-2 px-4 py-2 glass-panel-light border-b border-white/5 flex-shrink-0">
       <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
         {icon} {title} ({items.length})
       </h4>
@@ -458,7 +458,7 @@ const ConsensusSection: React.FC<{
 
     <div className="flex-1 overflow-y-auto studio-scrollbar px-3 py-2 space-y-2">
       {items.length === 0 && (
-        <p className="text-xs text-slate-600 text-center py-6">{emptyText}</p>
+        <p className="text-xs text-slate-500 text-center py-6">{emptyText}</p>
       )}
       {items.map((item) => (
         <InsightCard
@@ -496,17 +496,17 @@ const ConsensusPanel: React.FC = () => {
   return (
     <aside
       data-testid="consensus-panel"
-      className="consensus-panel bg-slate-900/50 border-l border-slate-700/50 flex flex-col min-h-0"
+      className="consensus-panel glass-panel-light border-l border-white/5 flex flex-col min-h-0"
     >
-      <div className="px-4 py-2 bg-slate-900/80 border-b border-slate-700/50 flex-shrink-0">
-        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+      <div className="px-4 py-2 glass-panel-light border-b border-white/5 flex-shrink-0">
+        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
           💡 共识与分歧
         </h3>
       </div>
 
       {isEmpty ? (
         <div className="flex-1 flex items-center justify-center p-4">
-          <p className="text-xs text-slate-600 text-center">
+          <p className="text-xs text-slate-500 text-center">
             讨论刚开始，尚无共识/分歧
           </p>
         </div>
@@ -520,7 +520,7 @@ const ConsensusPanel: React.FC = () => {
             onSpeechClick={handleSpeechClick}
             emptyText="暂无共识"
           />
-          <div className="border-t border-slate-700/30" />
+          <div className="border-t border-white/5" />
           <ConsensusSection
             title="分歧"
             icon="⚡"
@@ -556,7 +556,7 @@ const StudioPage: React.FC = () => {
 
   if (state.isLoading) {
     return (
-      <div className="min-h-screen bg-gray-950">
+      <div className="min-h-screen">
         <PageHeader title="演播厅" onBack={() => navigate('/')} />
         <div className="p-6 space-y-4">
           <LoadingSkeleton variant="line" count={1} />
@@ -577,7 +577,7 @@ const StudioPage: React.FC = () => {
 
   if (state.error) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 text-lg mb-2">⚠ {state.error}</p>
           <button
@@ -594,7 +594,7 @@ const StudioPage: React.FC = () => {
   // ─── 正常渲染 ──────────────────────────────────────
 
   return (
-    <div data-testid="studio-page" className="min-h-screen bg-gray-950 flex flex-col">
+    <div data-testid="studio-page" className="min-h-screen flex flex-col">
       <StudioHeader />
 
       {/* ============ 桌面/超宽：三栏布局 ============ */}
@@ -625,7 +625,7 @@ const StudioPage: React.FC = () => {
       {/* ============ 平板 768-1023：折叠布局 ============ */}
       <div className="hidden sm:flex md:hidden flex-1 flex-col min-h-0">
         {/* 嘉宾横条 */}
-        <div className="flex-shrink-0 max-h-48 overflow-y-auto studio-scrollbar border-b border-slate-700/50">
+        <div className="flex-shrink-0 max-h-48 overflow-y-auto studio-scrollbar border-b border-white/5">
           <GuestPanel />
         </div>
         {/* Transcript + 共识上下分布 */}
@@ -633,7 +633,7 @@ const StudioPage: React.FC = () => {
           <div className="flex-[2] min-h-0">
             <TranscriptPanel />
           </div>
-          <div className="flex-[1] min-h-0 border-t border-slate-700/50">
+          <div className="flex-[1] min-h-0 border-t border-white/5">
             <ConsensusPanel />
           </div>
         </div>
@@ -642,7 +642,7 @@ const StudioPage: React.FC = () => {
       {/* ============ 手机 <768：Tab 切换 ============ */}
       <div className="sm:hidden flex-1 flex flex-col min-h-0">
         {/* Tab 栏 */}
-        <div className="flex border-b border-slate-700/50 flex-shrink-0">
+        <div className="flex border-b border-white/5 flex-shrink-0">
           {([
             { key: 'guests', label: '嘉宾' },
             { key: 'transcript', label: '发言' },
@@ -653,8 +653,8 @@ const StudioPage: React.FC = () => {
               onClick={() => setMobileTab(tab.key)}
               className={`flex-1 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
                 mobileTab === tab.key
-                  ? 'text-indigo-400 border-b-2 border-indigo-400'
-                  : 'text-slate-500 hover:text-slate-300'
+                  ? 'text-indigo-300 border-b-2 border-indigo-300'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               {tab.label}

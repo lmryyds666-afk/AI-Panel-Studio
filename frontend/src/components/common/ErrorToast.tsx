@@ -79,8 +79,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               data-testid="error-toast"
               className={`animate-slide-in-down px-5 py-3 rounded-lg shadow-lg text-sm font-medium pointer-events-auto max-w-md ${
                 t.type === 'success'
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-red-600 text-white'
+                  ? 'bg-emerald-500/85 backdrop-blur-md text-white border border-emerald-400/20'
+                  : 'bg-rose-500/85 backdrop-blur-md text-white border border-rose-400/20'
               }`}
             >
               {t.message}
